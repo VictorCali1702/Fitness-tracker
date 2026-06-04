@@ -24,7 +24,7 @@
                     <input type="number" name="liczba_cwiczen"></br>
                     <label>Godzina treningu: </label>
                     <input type="time" name="czas"></br>
-                    <input type="submit" name="Zapisz trening"></br>
+                    <input type="submit" name="Zapisz" value="Zapisz trening"></br>
                 </form>
                 
                 <h3>Kalkulator BMI</h3>
@@ -35,7 +35,7 @@
                     <input type="number" name="wzrost">CM</br>
                     <label>Waga: </label>
                     <input type="number" name="waga">KG</br>
-                    <input type="submit" value="Oblicz"></br>
+                    <input type="submit" name="bmi" value="Oblicz"></br>
                 </form>
             </div>
             
@@ -52,26 +52,30 @@
 
 <?php
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+$wynik_treningu = "";
+$wynik_bmi = "";
+
+if (isset($_POST["Zapisz"])){
     $rodzaj_treningu = $_POST["rodzaj"];
     $liczba_cwiczen = $_POST["liczba_cwiczen"];
     $czas_treningu = $_POST["czas"];
 
-    echo "<h3>Trening: {$rodzaj_treningu} zawiera {$liczba_cwiczen} ćwiczeń. Trening o: {$czas_treningu}</h3>";
+    $wynik_treningu = "Trening: {$rodzaj_treningu} zawiera {$liczba_cwiczen} ćwiczeń. Trening o: {$czas_treningu}";
+}
+    
+// Kalkulator BMI
+// Wzrost i waga
 
-    // Kalkulator BMI
-    // Wzrost i waga
-
+if (isset($_POST["bmi"])){
     $wzrost = $_POST["wzrost"];
     $waga = $_POST["waga"];
 
     $converted_wzrost = $wzrost / 100;
 
-    $bmi = $waga / ($converted_wzrost ** 2);
+    $bmi = $waga / ($converted_bmi ** 2);
     $bmi_rounded = round($bmi, 1);
 
-    switch (true){
+    switch(true) {
         case ($bmi_rounded < 18.5):
             $category = "Niedowaga";
             break;
@@ -83,12 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         default:
             $category = "Otyłość";
-            break;
     }
-
-    echo "Twoje BMI wynosi: {$bmi_rounded}</br>";
-    echo "Kategoria: {$category}";
-    
+    $wynik_bmi = "Twoje BMI wynosi: {$bmi_rounded}<br>Kategoria: ($category)";
 }
+
 
 ?>
